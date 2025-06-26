@@ -83,7 +83,6 @@ async function generateCopy() {
             ></textarea>
           </div>
         </div>
-      </section>
       
       <button @click="generateCopy" :disabled="loading" class="action-button">
         <span v-if="!loading">🚀 点燃灵感！</span>
@@ -92,6 +91,7 @@ async function generateCopy() {
           灵感碰撞中...
         </span>
       </button>
+      </div>
     </main>
     
     <footer class="page-footer">
