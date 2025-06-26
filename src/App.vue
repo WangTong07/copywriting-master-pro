@@ -9,15 +9,20 @@ const selectedStyle = ref('小红书爆款');
 
 const apiKey = import.meta.env.VITE_ZHIPU_API_KEY;
 
+// 【核心升级】风格列表现在是完美的六边形战士！
 const styles = [
-  { name: '小红书爆款', icon: '🔥' },
-  { name: '朋友圈文艺', icon: '📜' },
-  { name: '抖音热门', icon: '🎵' },
-  { name: '知乎金句', icon: '💡' },
-  { name: '微笑男女', icon: '😊' }
+  { name: '小红书爆款', icon: '🔥', description: "一位深谙小红书流量密码的博主，文案充满种草感和精致生活气息，善用Emoji和Tag。" },
+  { name: '朋友圈文艺', icon: '📜', description: "一位内心细腻的文艺青年，语言充满诗意和淡淡的忧伤，句子简短，留白很多。" },
+  { name: '抖音热门', icon: '🎵', description: "一位追求潮流和热点的抖音达人，文案直接、有梗、富有节奏感，能引发模仿和挑战。" },
+  { name: '知乎金句', icon: '💡', description: "一位专业的知乎答主，喜欢用“先问是不是，再问为什么”的句式，语言理性、有洞察力，能一语中的。" },
+  { name: '搞笑男女', icon: '😊', description: "一位乐观开朗、有点神经质的搞笑男女，说话风格幽默、沙雕、自嘲，能让看到的人会心一笑。" },
+  { name: '搞笑病娇', icon: '🔪', description: "一位在极度占有欲和撒娇痴缠之间反复横跳的“病娇”，文案表面可爱，实则充满了“不可以离开我哦”的警告，又好笑又让人背脊发凉。" }
 ];
 
-
+const textareaRows = computed(() => {
+  const newlines = (userInput.value.match(/\n/g) || []).length;
+  return Math.max(3, newlines + 1);
+});
 
 async function generateCopy() {
   if (!userInput.value.trim()) {
@@ -26,7 +31,25 @@ async function generateCopy() {
   }
   loading.value = true;
   isResultVisible.value = false;
-  const prompt = `你是一位深谙社交媒体传播之道的文案大师，尤其精通小红书和抖音的爆款文体。请根据以下信息，为我创作5条风格各异、能引发点赞和评论的文案。\n\n【核心要求】\n1. 文案风格：紧密围绕 “${selectedStyle.value}” 风格进行创作。\n2. 核心关键词：『${userInput.value}』\n3. 必备元素：每条文案都必须包含生动有趣、符合语境的Emoji。\n4. 输出格式：请直接输出5条文案，每条之间用两个换行符隔开，不要添加任何额外的解释或标题。\n\n请开始你的创作。`;
+
+  const currentStyleObject = styles.find(s => s.name === selectedStyle.value);
+  const styleDescription = currentStyleObject ? currentStyleObject.description : "一位有创意的文案作者";
+
+  const prompt = `你将扮演一个特定的角色，来为我创作社交媒体文案。
+
+  【你的角色定义】
+  ${styleDescription}
+
+  【你的创作任务】
+  请根据以下核心关键词，严格按照你的角色设定，创作5条风格鲜明、能引发点赞和评论的文案。
+
+  【核心要求】
+  1. 核心关键词：『${userInput.value}』
+  2. 必备元素：每条文案都必须包含生动有趣、符合语境的Emoji。
+  3. 输出格式：请直接输出5条文案，每条之间用两个换行符隔开，不要添加任何额外的解释或标题。
+
+  请开始你的创作。`;
+
   try {
     const response = await fetch("https://open.bigmodel.cn/api/paas/v4/chat/completions", {
       method: "POST",
@@ -87,23 +110,23 @@ async function generateCopy() {
       </section>
 
       <section class="control-panel">
-  <label class="panel-label">
-    <span class="label-icon-wrapper chat-icon">
-      <span class="label-icon"></span>
-    </span>
-    输入灵感火花
-  </label>
-  <div class="textarea-wrapper">
-    <textarea 
-      v-model="userInput" 
-      rows="6" 
-      placeholder="例如: 夏天、海边、许愿瓜、开心
+        <label class="panel-label">
+          <span class="label-icon-wrapper chat-icon">
+            <span class="label-icon"></span>
+          </span>
+          输入灵感火花
+        </label>
+        <div class="textarea-wrapper">
+          <textarea 
+            v-model="userInput" 
+            rows="6" 
+            placeholder="例如: 夏天、海边、许愿瓜、开心
 输入你想要的关键词，用逗号分隔
 让AI为你创造无限可能的爆款文案
 每个词都是灵感的种子，等待绽放..."
-    ></textarea>
-  </div>
-</section>
+          ></textarea>
+        </div>
+      </section>
       
       <button @click="generateCopy" :disabled="loading" class="action-button">
         <span v-if="!loading" class="button-content">
@@ -178,7 +201,7 @@ body { font-family: var(--font-body); background-color: var(--bg-color); color: 
   position: relative;
   z-index: 1;
   width: 100%;
-  max-width: 560px; /* 【核心修改】宽度调整 */
+  max-width: 560px;
   background-color: var(--card-bg-color);
   border: 1px solid white;
   border-radius: 40px;
@@ -186,7 +209,7 @@ body { font-family: var(--font-body); background-color: var(--bg-color); color: 
   box-shadow: 0 25px 50px -12px var(--shadow-color);
   display: flex;
   flex-direction: column;
-  gap: 1.75rem; /* 【核心修改】间距调整 */
+  gap: 1.75rem;
 }
 
 .card-header { text-align: center; }
@@ -199,39 +222,18 @@ body { font-family: var(--font-body); background-color: var(--bg-color); color: 
 .label-icon-wrapper .label-icon { width: 8px; height: 8px; background-color: white; border-radius: 50%; }
 .label-icon-wrapper.chat-icon { background-color: #fbbf24; }
 
-.style-selector { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+/* 【核心升级】Grid布局，自动适应6个按钮 */
+.style-selector { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 0.75rem; }
 .style-selector button { padding: 0.8rem; border: 1px solid var(--border-color); background-color: #f9fafb; color: var(--text-dim-color); font-size: 0.875rem; font-weight: 600; border-radius: 16px; cursor: pointer; transition: all 0.2s ease; display: flex; align-items: center; justify-content: center; gap: 0.35rem; }
 .style-selector button:hover { transform: translateY(-2px); box-shadow: 0 4px 12px var(--shadow-color); border-color: white; }
 .style-selector button.active { background: var(--primary-gradient); color: white; border-color: transparent; box-shadow: 0 7px 15px rgba(16, 185, 129, 0.25); }
 
-/* 【核心修复】textarea和示例文字的结构与样式 */
-.guide-list {
-  list-style: none;
-  padding: 0 0 1rem 0; /* 调整padding */
-  margin: 0;
-  color: var(--text-dim-color);
-  font-size: 0.875rem;
-  line-height: 1.8;
-}
+.textarea-wrapper { border: 1px solid var(--border-color); border-radius: 20px; background-color: white; }
+.guide-list { list-style: none; padding: 1rem 1rem 0 1rem; margin: 0; color: var(--text-dim-color); font-size: 0.875rem; line-height: 1.8; }
 .guide-list li { margin-bottom: 0.25rem; }
-.textarea-wrapper {
-  border: 1px solid var(--border-color);
-  border-radius: 20px;
-  background-color: white;
-  overflow: hidden; /* 确保内部元素的圆角正确 */
-}
-textarea {
-  width: 100%;
-  background: transparent;
-  border: none;
-  resize: none;
-  color: var(--text-color);
-  font-size: 1rem;
-  line-height: 1.6;
-  padding: 1rem; /* 给textarea自身加上内边距 */
-}
+textarea { width: 100%; background: transparent; border: none; resize: none; color: var(--text-color); font-size: 1rem; line-height: 1.6; border-top: 1px dashed var(--border-color); padding: 1rem; margin-top: 1rem; }
 textarea:focus { outline: none; }
-
+    
 .action-button {
   width: 100%;
   padding: 1.25rem;
@@ -263,5 +265,5 @@ textarea:focus { outline: none; }
 .result-content pre { white-space: pre-wrap; word-wrap: break-word; font-family: var(--font-body); font-size: 1rem; line-height: 1.8; margin: 0; color: var(--text-color); }
 .slide-fade-enter-active, .slide-fade-leave-active { transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1); }
 .slide-fade-enter-from, .slide-fade-leave-to { opacity: 0; transform: scale(0.95) translateY(20px); }
-@media (max-width: 768px) { .main-card { padding: 1.5rem; } .card-header h1 { font-size: 1.75rem; } }
+@media (max-width: 768px) { .main-card { padding: 1.5rem; } .card-header h1 { font-size: 1.75rem; } .style-selector { grid-template-columns: 1fr 1fr;} }
 </style>
