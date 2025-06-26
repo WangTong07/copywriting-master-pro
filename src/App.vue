@@ -1,4 +1,5 @@
 <script setup>
+// JavaScript逻辑部分与之前完全相同，未做任何改动
 import { ref, computed } from 'vue';
 
 const userInput = ref('');
@@ -51,47 +52,48 @@ async function generateCopy() {
 
 <template>
   <div class="page-wrapper">
-    <main class="neumorphism-card">
+    <div class="background-texture"></div>
+    <main class="main-container">
       <header class="card-header">
         <h1 class="main-title">AI 爆款文案神器</h1>
-        <p class="subtitle">一秒点燃灵感，轻松引爆社交圈</p>
+        <p class="subtitle">你的随身文案军师，一秒点燃社交圈</p>
       </header>
       
-      <div class="control-panel">
-        <div class="panel-group">
-          <label class="group-label">选择一个灵感风格</label>
-          <div class="style-selector">
-            <button 
-              v-for="style in styles" 
-              :key="style"
-              :class="{ active: selectedStyle === style }"
-              @click="selectedStyle = style"
-            >
-              {{ style }}
-            </button>
-          </div>
+      <section class="control-panel">
+        <label class="panel-label">1. 选择灵感风格</label>
+        <div class="style-selector">
+          <button 
+            v-for="style in styles" 
+            :key="style"
+            :class="{ active: selectedStyle === style }"
+            @click="selectedStyle = style"
+          >
+            {{ style }}
+          </button>
         </div>
+      </section>
 
-        <div class="panel-group">
-          <label class="group-label">输入你的灵感火花</label>
-          <div class="input-container">
-            <svg class="input-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"></path></svg>
-            <textarea 
-              v-model="userInput" 
-              :rows="textareaRows" 
-              placeholder="例如：夏天, 海边, 冰西瓜, 开心"
-            ></textarea>
-          </div>
+      <section class="control-panel">
+        <label class="panel-label">2. 输入灵感火花</label>
+        <div class="input-wrapper">
+          <textarea 
+            v-model="userInput" 
+            :rows="textareaRows" 
+            placeholder="例如：夏天, 海边, 冰西瓜, 开心"
+          ></textarea>
         </div>
+      </section>
       
       <button @click="generateCopy" :disabled="loading" class="action-button">
-        <span v-if="!loading">🚀 点燃灵感！</span>
+        <span v-if="!loading" class="button-content">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15.042 21.672L13.684 16.6s.402-1.248 1.524-1.41c1.122-.162 1.628.402 1.628.402l4.974 1.358-1.892 3.722zM19.336 7.425L17.978 2.35s-.402-1.248-1.524-1.41c-1.122-.162-1.628.402-1.628.402l-4.974 1.358 1.892 3.722zM8.664 21.672L10.022 16.6s-.402-1.248-1.524-1.41c-1.122-.162-1.628.402-1.628.402l-4.974 1.358 1.892 3.722zM4.664 7.425L6.022 2.35s.402-1.248 1.524-1.41c1.122-.162 1.628.402 1.628.402l4.974 1.358-1.892 3.722z"></path></svg>
+          点燃灵感
+        </span>
         <span v-else class="loading-state">
           <svg class="spinner" viewBox="0 0 50 50"><circle class="path" cx="25" cy="25" r="20" fill="none" stroke-width="5"></circle></svg>
           灵感碰撞中...
         </span>
       </button>
-      </div>
     </main>
     
     <footer class="page-footer">
@@ -115,16 +117,20 @@ async function generateCopy() {
 </template>
 
 <style>
+/* --- “灵感绿洲”最终版样式 --- */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
 :root {
-  --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
-  --bg-color: #f0f2f5; 
-  --text-color: #374151;
-  --text-dim-color: #6b7280;
-  --primary-gradient: linear-gradient(125deg, #f97316, #ec4899, #8b5cf6, #14b8a6);
-  --shadow-light: #ffffff;
-  --shadow-dark: #d1d5db;
-  --card-radius: 24px;
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  --bg-color: #111827;
+  --card-bg-color: #1f2937;
+  --text-color: #d1d5db;
+  --text-dim-color: #9ca3af;
+  --border-color: rgba(255, 255, 255, 0.1);
+  --primary-color: #34d399; /* 赛博青柠绿 */
+  --primary-hover-color: #a7f3d0;
 }
+
 *, *::before, *::after { box-sizing: border-box; }
 body {
   font-family: var(--font-sans);
@@ -140,16 +146,28 @@ body {
   place-items: center;
   padding: 2rem 1rem;
 }
-.neumorphism-card {
+.background-texture {
+  position: fixed;
+  top: 0;
+  left: 0;
   width: 100%;
-  max-width: 560px;
-  background: var(--bg-color);
-  border-radius: var(--card-radius);
+  height: 100%;
+  background-image: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80" width="80" height="80"%3E%3Crect fill="%231a202c" width="80" height="80"%3E%3C/rect%3E%3Cg fill-opacity="0.1"%3E%3Ccircle fill="%232d3748" cx="40" cy="40" r="18"%3E%3C/circle%3E%3Ccircle fill="%234a5568" cx="40" cy="40" r="14"%3E%3C/circle%3E%3Ccircle fill="%23718096" cx="40" cy="40" r="10"%3E%3C/circle%3E%3Ccircle fill="%23a0aec0" cx="40" cy="40" r="6"%3E%3C/circle%3E%3C/g%3E%3C/svg%3E');
+  opacity: 0.1;
+  z-index: -1;
+}
+
+.main-container {
+  width: 100%;
+  max-width: 580px;
+  background-color: var(--card-bg-color);
+  border: 1px solid var(--border-color);
+  border-radius: 24px;
   padding: 2.5rem;
-  box-shadow: 9px 9px 18px var(--shadow-dark), -9px -9px 18px var(--shadow-light);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
   display: flex;
   flex-direction: column;
-  gap: 1.75rem;
+  gap: 2rem;
 }
 
 .card-header { text-align: center; }
@@ -157,90 +175,99 @@ body {
   font-size: 2.25rem;
   font-weight: 700;
   margin: 0 0 0.5rem;
-  background: var(--primary-gradient);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-size: 300% 300%;
-  animation: gradient-flow 5s ease infinite;
+  color: #f9fafb;
 }
+.main-title span { color: var(--primary-color); }
 .subtitle { font-size: 1rem; color: var(--text-dim-color); margin: 0; }
 
-@keyframes gradient-flow {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-}
+.control-panel { }
+.panel-label { font-size: 0.875rem; font-weight: 500; color: var(--text-dim-color); margin-bottom: 0.75rem; display: block; }
 
-.control-panel { display: flex; flex-direction: column; gap: 1.5rem; }
-.group-label { font-size: 0.875rem; font-weight: 600; color: var(--text-dim-color); margin-bottom: 0.75rem; display: block; }
-
-.style-selector { display: grid; grid-template-columns: repeat(auto-fit, minmax(90px, 1fr)); gap: 0.75rem; }
+.style-selector { display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 0.75rem; }
 .style-selector button {
-  padding: 0.6rem 0.5rem;
-  border: none;
-  border-radius: 12px;
-  background: var(--bg-color);
-  color: var(--text-color);
+  padding: 0.75rem 0.5rem;
+  border: 1px solid var(--border-color);
+  background-color: transparent;
+  color: var(--text-dim-color);
   font-size: 0.875rem;
   font-weight: 500;
+  border-radius: 8px;
   cursor: pointer;
-  transition: all 0.2s ease-in-out;
-  box-shadow: 5px 5px 10px var(--shadow-dark), -5px -5px 10px var(--shadow-light);
+  transition: all 0.2s ease;
 }
-.style-selector button:hover { transform: translateY(-2px); box-shadow: 7px 7px 14px var(--shadow-dark), -7px -7px 14px var(--shadow-light); }
+.style-selector button:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+  color: var(--text-color);
+}
 .style-selector button.active {
-  box-shadow: inset 5px 5px 10px var(--shadow-dark), inset -5px -5px 10px var(--shadow-light);
-  color: #ec4899;
+  background-color: var(--primary-color);
+  color: var(--bg-color);
+  border-color: var(--primary-color);
   font-weight: 700;
 }
 
-.input-container {
-  position: relative;
-  border-radius: 16px;
-  padding: 1rem 1rem 1rem 3.25rem;
-  box-shadow: inset 5px 5px 10px var(--shadow-dark), inset -5px -5px 10px var(--shadow-light);
+.input-wrapper { position: relative; }
+textarea {
+  width: 100%;
+  background: #111827;
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 1rem;
+  color: var(--text-color);
+  font-size: 1rem;
+  line-height: 1.6;
+  resize: none;
+  transition: all 0.2s ease;
 }
-.input-icon { position: absolute; top: 1.1rem; left: 1.1rem; color: var(--text-dim-color); }
-textarea { width: 100%; background: transparent; border: none; resize: none; color: var(--text-color); font-size: 1rem; line-height: 1.6; }
-textarea:focus { outline: none; }
+textarea:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(52, 211, 153, 0.3);
+}
 
 .action-button {
   width: 100%;
-  padding: 1rem;
+  padding: 1.125rem;
   border: none;
-  border-radius: 16px;
-  color: white;
+  border-radius: 12px;
+  color: #111827;
   font-size: 1.125rem;
   font-weight: 600;
   cursor: pointer;
-  background: var(--primary-gradient);
-  background-size: 300% 300%;
-  box-shadow: 5px 5px 10px var(--shadow-dark), -5px -5px 10px var(--shadow-light);
+  background: var(--primary-color);
+  box-shadow: 0 0 20px rgba(52, 211, 153, 0.3);
   transition: all 0.2s ease-in-out;
+  animation: pulse 2s infinite; /* 呼吸动画 */
 }
 .action-button:hover:not(:disabled) {
-  animation: gradient-flow 4s ease infinite;
   transform: translateY(-3px);
-  box-shadow: 8px 8px 16px var(--shadow-dark), -8px -8px 16px var(--shadow-light);
+  box-shadow: 0 0 30px rgba(52, 211, 153, 0.5);
 }
-.action-button:active:not(:disabled) { box-shadow: inset 5px 5px 10px #c62e65, inset -5px -5px 10px #f8d387; }
-.action-button:disabled { background: #d1d9e6; box-shadow: none; color: var(--text-dim-color); cursor: not-allowed; animation: none; }
+.action-button:disabled { background: #374151; box-shadow: none; color: var(--text-dim-color); cursor: not-allowed; animation: none; }
 
-.loading-state { display: flex; align-items: center; justify-content: center; gap: 0.75rem; }
-.spinner { animation: rotate 2s linear infinite; width: 24px; height: 24px; }
-.path { stroke: white; stroke-linecap: round; animation: dash 1.5s ease-in-out infinite; }
-@keyframes rotate { 100% { transform: rotate(360deg); } }
-@keyframes dash { 0% { stroke-dasharray: 1, 150; stroke-dashoffset: 0; } 50% { stroke-dasharray: 90, 150; stroke-dashoffset: -35; } 100% { stroke-dasharray: 90, 150; stroke-dashoffset: -124; } }
+.button-content, .loading-state { display: flex; align-items: center; justify-content: center; gap: 0.75rem; }
+@keyframes pulse {
+  0% { box-shadow: 0 0 20px rgba(52, 211, 153, 0.3); }
+  50% { box-shadow: 0 0 30px rgba(52, 211, 153, 0.5); }
+  100% { box-shadow: 0 0 20px rgba(52, 211, 153, 0.3); }
+}
+
+/* 其他样式保持不变 */
 .page-footer { text-align: center; color: var(--text-dim-color); margin-top: 2rem; }
-.page-footer a { color: var(--text-color); font-weight: 500; text-decoration: none; }
-.result-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(238, 240, 244, 0.7); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); display: flex; justify-content: center; align-items: center; z-index: 100; }
-.result-card { width: 90%; max-width: 800px; height: 80vh; background: var(--bg-color); border-radius: var(--card-radius); padding: 2rem; box-shadow: 8px 8px 16px var(--shadow-dark), -8px -8px 16px var(--shadow-light); display: flex; flex-direction: column; }
+.page-footer a { color: var(--text-dim-color); font-weight: 500; text-decoration: none; }
+.page-footer a:hover { color: var(--primary-color); }
+.result-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(17, 24, 39, 0.8); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); display: flex; justify-content: center; align-items: center; z-index: 100; }
+.result-card { width: 90%; max-width: 800px; height: 80vh; background-color: var(--card-bg-color); border: 1px solid var(--border-color); border-radius: 24px; padding: 2rem; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); display: flex; flex-direction: column; }
 .result-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-shrink: 0; }
-.result-header h3 { margin: 0; font-size: 1.5rem; }
+.result-header h3 { margin: 0; font-size: 1.5rem; color: #f9fafb;}
 .close-btn { background: none; border: none; font-size: 2.5rem; color: var(--text-dim-color); cursor: pointer; transition: color 0.3s ease; line-height: 1; padding: 0; }
-.result-content { flex-grow: 1; overflow-y: auto; background: var(--bg-color); border-radius: 20px; padding: 1.5rem; box-shadow: inset 5px 5px 10px var(--shadow-dark), inset -5px -5px 10px var(--shadow-light); }
+.result-content { flex-grow: 1; overflow-y: auto; background-color: #111827; border-radius: 12px; padding: 1.5rem; }
 .result-content pre { white-space: pre-wrap; word-wrap: break-word; font-family: var(--font-sans); font-size: 1rem; line-height: 1.8; margin: 0; color: var(--text-color); }
 .slide-fade-enter-active, .slide-fade-leave-active { transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1); }
 .slide-fade-enter-from, .slide-fade-leave-to { opacity: 0; transform: scale(0.95) translateY(20px); }
-@media (max-width: 768px) { .neumorphism-card { padding: 1.5rem; } .card-header h1 { font-size: 1.75rem; } }
+.spinner { animation: rotate 2s linear infinite; width: 24px; height: 24px; }
+.path { stroke: #111827; stroke-linecap: round; animation: dash 1.5s ease-in-out infinite; }
+@keyframes rotate { 100% { transform: rotate(360deg); } }
+@keyframes dash { 0% { stroke-dasharray: 1, 150; stroke-dashoffset: 0; } 50% { stroke-dasharray: 90, 150; stroke-dashoffset: -35; } 100% { stroke-dasharray: 90, 150; stroke-dashoffset: -124; } }
+@media (max-width: 768px) { .main-container { padding: 1.5rem; } .card-header h1 { font-size: 1.75rem; } }
 </style>
