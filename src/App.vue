@@ -17,10 +17,7 @@ const styles = [
   { name: '微笑男女', icon: '😊' }
 ];
 
-const textareaRows = computed(() => {
-  const newlines = (userInput.value.match(/\n/g) || []).length;
-  return Math.max(3, newlines + 1);
-});
+
 
 async function generateCopy() {
   if (!userInput.value.trim()) {
@@ -90,22 +87,23 @@ async function generateCopy() {
       </section>
 
       <section class="control-panel">
-        <label class="panel-label">
-          <span class="label-icon-wrapper chat-icon">
-            <span class="label-icon"></span>
-          </span>
-          输入灵感火花
-        </label>
-        <ul class="guide-list">
-          <li>✨ 例如: 夏天、海边、许愿瓜、开心</li>
-          <li>🧠 输入你想要的关键词，用逗号分隔</li>
-          <li>🚀 让AI为你创造无限可能的爆款文案</li>
-          <li>🌍 每个词都是灵感的种子，等待绽放...</li>
-        </ul>
-        <div class="textarea-wrapper">
-          <textarea v-model="userInput" :rows="textareaRows"></textarea>
-        </div>
-      </section>
+  <label class="panel-label">
+    <span class="label-icon-wrapper chat-icon">
+      <span class="label-icon"></span>
+    </span>
+    输入灵感火花
+  </label>
+  <div class="textarea-wrapper">
+    <textarea 
+      v-model="userInput" 
+      rows="6" 
+      placeholder="例如: 夏天、海边、许愿瓜、开心
+输入你想要的关键词，用逗号分隔
+让AI为你创造无限可能的爆款文案
+每个词都是灵感的种子，等待绽放..."
+    ></textarea>
+  </div>
+</section>
       
       <button @click="generateCopy" :disabled="loading" class="action-button">
         <span v-if="!loading" class="button-content">
