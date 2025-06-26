@@ -1,5 +1,4 @@
 <script setup>
-// JavaScript逻辑部分与之前完全相同，未做任何改动
 import { ref, computed } from 'vue';
 
 const userInput = ref('');
@@ -10,7 +9,6 @@ const selectedStyle = ref('小红书爆款');
 
 const apiKey = import.meta.env.VITE_ZHIPU_API_KEY;
 
-// 更新风格列表以匹配设计稿
 const styles = [
   { name: '小红书爆款', icon: '🔥' },
   { name: '朋友圈文艺', icon: '📜' },
@@ -98,13 +96,13 @@ async function generateCopy() {
           </span>
           输入灵感火花
         </label>
+        <ul class="guide-list">
+          <li>✨ 例如: 夏天、海边、许愿瓜、开心</li>
+          <li>🧠 输入你想要的关键词，用逗号分隔</li>
+          <li>🚀 让AI为你创造无限可能的爆款文案</li>
+          <li>🌍 每个词都是灵感的种子，等待绽放...</li>
+        </ul>
         <div class="textarea-wrapper">
-          <ul class="guide-list">
-            <li>✨ 例如: 夏天、海边、许愿瓜、开心</li>
-            <li>🧠 输入你想要的关键词，用逗号分隔</li>
-            <li>🚀 让AI为你创造无限可能的爆款文案</li>
-            <li>🌍 每个词都是灵感的种子，等待绽放...</li>
-          </ul>
           <textarea v-model="userInput" :rows="textareaRows"></textarea>
         </div>
       </section>
@@ -143,7 +141,7 @@ async function generateCopy() {
 :root {
   --font-display: 'Nunito', sans-serif;
   --font-body: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
-  --bg-color: #f0fdf4; /* 定制的薄荷绿背景 */
+  --bg-color: #f0fdf4;
   --card-bg-color: #ffffff;
   --text-color: #1f2937;
   --text-dim-color: #6b7280;
@@ -155,11 +153,10 @@ async function generateCopy() {
 }
 *, *::before, *::after { box-sizing: border-box; }
 body { font-family: var(--font-body); background-color: var(--bg-color); color: var(--text-color); margin: 0; }
-
+    
 .page-wrapper {
   width: 100%;
   min-height: 100vh;
-  /* 【核心修改】使用Grid布局实现完美居中 */
   display: grid;
   place-items: center;
   padding: 2rem 1rem;
@@ -183,15 +180,15 @@ body { font-family: var(--font-body); background-color: var(--bg-color); color: 
   position: relative;
   z-index: 1;
   width: 100%;
-  max-width: 480px; /* 【核心修改】参照周报助手的紧凑尺寸 */
+  max-width: 560px; /* 【核心修改】宽度调整 */
   background-color: var(--card-bg-color);
   border: 1px solid white;
   border-radius: 40px;
-  padding: 2.5rem; /* 【核心修改】调整内边距 */
+  padding: 2.5rem;
   box-shadow: 0 25px 50px -12px var(--shadow-color);
   display: flex;
   flex-direction: column;
-  gap: 1.75rem; /* 【核心修改】调整内部间距 */
+  gap: 1.75rem; /* 【核心修改】间距调整 */
 }
 
 .card-header { text-align: center; }
@@ -209,10 +206,32 @@ body { font-family: var(--font-body); background-color: var(--bg-color); color: 
 .style-selector button:hover { transform: translateY(-2px); box-shadow: 0 4px 12px var(--shadow-color); border-color: white; }
 .style-selector button.active { background: var(--primary-gradient); color: white; border-color: transparent; box-shadow: 0 7px 15px rgba(16, 185, 129, 0.25); }
 
-.textarea-wrapper { border: 1px solid var(--border-color); border-radius: 20px; padding: 1rem; background-color: white; }
-.guide-list { list-style: none; padding: 0; margin: 0 0 1rem 0; color: var(--text-dim-color); font-size: 0.875rem; line-height: 1.8; }
+/* 【核心修复】textarea和示例文字的结构与样式 */
+.guide-list {
+  list-style: none;
+  padding: 0 0 1rem 0; /* 调整padding */
+  margin: 0;
+  color: var(--text-dim-color);
+  font-size: 0.875rem;
+  line-height: 1.8;
+}
 .guide-list li { margin-bottom: 0.25rem; }
-textarea { width: 100%; background: transparent; border: none; resize: none; color: var(--text-color); font-size: 1rem; line-height: 1.6; border-top: 1px dashed var(--border-color); padding-top: 1rem; }
+.textarea-wrapper {
+  border: 1px solid var(--border-color);
+  border-radius: 20px;
+  background-color: white;
+  overflow: hidden; /* 确保内部元素的圆角正确 */
+}
+textarea {
+  width: 100%;
+  background: transparent;
+  border: none;
+  resize: none;
+  color: var(--text-color);
+  font-size: 1rem;
+  line-height: 1.6;
+  padding: 1rem; /* 给textarea自身加上内边距 */
+}
 textarea:focus { outline: none; }
 
 .action-button {
